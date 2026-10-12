@@ -1,23 +1,90 @@
-    // KONFIGURASI URL SCRIPT (SANGAT PENTING)
-    // Ganti nilai di bawah ini dengan URL Web App Google Apps Script Anda yang VALID!
-    // ==============================================================================
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwxIPSSa0g5c-uIx8HQp4Ee30Uu0JMjvmjVp6HLREx4a_9oAkA7fOqhnhjgtgGnFKuKNA/exec";
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbynxGedg6XUwv_YOFdlIl-BUhpWbKjfv4RclKqcZtXT_3hqvw2VkqPeGj7JSN4YZKQFgA/exec";
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Formulir & Status Praotorisasi PPRA</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f7f6; }
+    .container { background-color: white; padding: 20px; border-radius: 8px; max-width: 700px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    input, select, textarea { margin-bottom: 15px; padding: 10px; width: 100%; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+    button { padding: 12px 20px; background-color: #0056b3; color: white; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; }
+    button:hover { background-color: #004494; }
+    button:disabled { background-color: #cccccc; cursor: not-allowed; }
+    .form-group { margin-bottom: 10px; }
+    
+    /* Gaya untuk Tabel Status */
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+    th { background-color: #0056b3; color: white; }
+    .btn-refresh { background-color: #28a745; margin-top: 20px; }
+    .btn-refresh:hover { background-color: #218838; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 style="text-align: center; color: #333;">Permintaan Antibiotik Reserve</h2>
+    
+    <form id="ppraForm">
+      <div class="form-group"><label>Nama Pasien:</label><input type="text" id="Nama_Pasien" required></div>
+      <div class="form-group"><label>No. RM:</label><input type="text" id="No_RM" required></div>
+      <div class="form-group"><label>Nama DPJP:</label><input type="text" id="Nama_DPJP" required></div>
+      <div class="form-group"><label>Diagnosa:</label><input type="text" id="Diagnosa" required></div>
+      <div class="form-group">
+        <label>Pilih Antibiotik Reserve:</label>
+        <select id="Antibiotik">
+          <option value="Meropenem (IV)">Meropenem (IV)</option>
+          <option value="Seftazidim (IV)">Seftazidim (IV)</option>
+          <option value="Vankomisin (IV)">Vankomisin (IV)</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Regimen Dosis:</label><input type="text" id="Regimen_Dosis" required></div>
+      <div class="form-group">
+        <label>Indikasi:</label>
+        <select id="Indikasi">
+          <option value="Empiris">Empiris</option>
+          <option value="Definitif">Definitif</option>
+          <option value="Profilaksis">Profilaksis</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Upload Foto Hasil Kultur (Kosongkan jika tidak ada):</label>
+        <input type="file" id="Foto_Kultur" accept="image/*">
+      </div>
+      <div class="form-group"><label>Alasan Permintaan:</label><textarea id="Alasan" rows="3" required></textarea></div>
 
-    // ------------------------------------------------------------------------------
-    // FUNGSI 1: MENGIRIM DATA FORMULIR & UPLOAD FOTO
-    // ------------------------------------------------------------------------------
+      <button type="submit" id="btnSubmit">Kirim Permintaan ke Tim PGA</button>
+    </form>
+
+    <hr style="margin: 40px 0;">
+
+    <h2 style="text-align: center; color: #333;">Status Antrean Permintaan</h2>
+    <button class="btn-refresh" onclick="muatStatus()">🔄 Muat Ulang Data Terbaru</button>
+    
+    <table>
+      <thead>
+        <tr>
+          <th>Nama Pasien</th>
+          <th>No. RM</th>
+          <th>Antibiotik</th>
+          <th>Status</th>
+          <th>Catatan PGA</th>
+        </tr>
+      </thead>
+      <tbody id="tabelStatus">
+        <tr><td colspan="5" style="text-align:center;">Memuat data...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // GANTI URL DI BAWAH DENGAN WEB APP URL ANDA YANG PALING BARU (LANGKAH 2)
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzlpCTqXGvHcxbVTfIf4OaWW5nTv1RTu8FsthBMdIiooVyotQv723eQYQWILEKZTxL_CQ/exec";
+
+    // --- KODE UNTUK MENGIRIM DATA (SAMA SEPERTI SEBELUMNYA) ---
     document.getElementById("ppraForm").addEventListener("submit", function(e) {
       e.preventDefault();
-
       const btn = document.getElementById("btnSubmit");
-      const btnText = document.getElementById("btnText");
-      const spinner = document.getElementById("loadingSpinner");
-
-      // Ubah tampilan tombol saat proses kirim
+      btn.innerText = "Mengirim Data... Mohon Tunggu";
       btn.disabled = true;
-      btnText.innerText = "Mengirim Data & File...";
-      spinner.style.display = "block";
 
       const fileInput = document.getElementById("Foto_Kultur");
       const payload = {
@@ -33,122 +100,83 @@
         fileName: null
       };
 
-      // Cek apakah ada file foto yang diunggah
       if (fileInput.files.length > 0) {
         const file = fileInput.files[0];
-
-        // Validasi ukuran file (opsional, maks 5MB)
-        if(file.size > 5 * 1024 * 1024) {
-            alert("Ukuran file foto terlalu besar. Maksimal 5MB.");
-            resetTombolKirim();
-            return;
-        }
-
         const reader = new FileReader();
         reader.onload = function(event) {
           payload.fileBase64 = event.target.result;
           payload.fileName = file.name;
-          kirimKeGoogleSheets(payload);
+          kirimKeServer(payload);
         };
         reader.readAsDataURL(file);
       } else {
-        // Jika tidak ada foto, kirim data teks saja
-        payload.fileBase64 = null;
-        payload.fileName = "Tidak ada file";
-        kirimKeGoogleSheets(payload);
+        kirimKeServer(payload);
       }
     });
 
-    function kirimKeGoogleSheets(payload) {
-      fetch(WEB_APP_URL, {
-        method: "POST",
-        body: JSON.stringify(payload)
-      })
+    function kirimKeServer(payload) {
+      fetch(WEB_APP_URL, { method: "POST", body: JSON.stringify(payload) })
       .then(response => response.text())
       .then(data => {
-        alert("Pemberitahuan: Permintaan resep antibiotik reserve berhasil dikirim ke Dasbor Tim PGA.");
+        alert("Data berhasil dikirim!");
         document.getElementById("ppraForm").reset();
-        resetTombolKirim();
-        muatStatus(); // Otomatis refresh tabel di bawah
+        const btn = document.getElementById("btnSubmit");
+        btn.innerText = "Kirim Permintaan ke Tim PGA";
+        btn.disabled = false;
+        muatStatus(); // Otomatis memuat ulang tabel setelah kirim
       })
       .catch(error => {
-        console.error("Error:", error);
-        alert("Gagal terhubung ke server. Pastikan URL Web App sudah benar dan ada koneksi internet.");
-        resetTombolKirim();
+        alert("Terjadi kesalahan. Coba lagi.");
+        const btn = document.getElementById("btnSubmit");
+        btn.innerText = "Kirim Permintaan ke Tim PGA";
+        btn.disabled = false;
       });
     }
 
-    function resetTombolKirim() {
-      const btn = document.getElementById("btnSubmit");
-      document.getElementById("btnText").innerText = "Kirim Permintaan ke Dasbor PGA";
-      document.getElementById("loadingSpinner").style.display = "none";
-      btn.disabled = false;
-    }
-
-    // ------------------------------------------------------------------------------
-    // FUNGSI 2: MENGAMBIL DAN MENAMPILKAN DATA STATUS KE DALAM TABEL
-    // ------------------------------------------------------------------------------
+    // --- KODE BARU: UNTUK MEMBACA DAN MENAMPILKAN STATUS DARI SHEETS ---
     function muatStatus() {
       const tbody = document.getElementById("tabelStatus");
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 24px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Sinkronisasi data terbaru...</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Memuat data dari server...</td></tr>';
 
       fetch(WEB_APP_URL)
         .then(response => response.json())
         .then(data => {
           tbody.innerHTML = "";
-
           if(data.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 24px; color: var(--text-muted);">Belum ada antrean permintaan antibiotik reserve saat ini.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Belum ada data permintaan.</td></tr>';
             return;
           }
-
-          // Membaca data secara terbalik (Data terbaru / baris terbawah muncul di paling atas tabel)
+          
+          // Membaca data dari yang paling baru (bawah ke atas)
           for (let i = data.length - 1; i >= 0; i--) {
             const row = data[i];
-
-            // Konfigurasi Visual Badge Status
-            let badgeClass = "badge-menunggu";
-            let statusTeks = row.Status ? row.Status.toUpperCase() : "MENUNGGU REVIEW";
-
-            if (statusTeks.includes("DISETUJUI") && statusTeks.includes("CATATAN")) {
-              badgeClass = "badge-catatan";
-            } else if (statusTeks === "DISETUJUI") {
-              badgeClass = "badge-disetujui";
-            } else if (statusTeks === "DITOLAK") {
-              badgeClass = "badge-ditolak";
-            } else if (statusTeks === "DITUNDA") {
-              badgeClass = "badge-ditunda";
-            }
-
-            // Mencegah error jika catatan kosong
-            let catatan = row.Catatan && row.Catatan.trim() !== "" ? row.Catatan : "<em>Belum ada catatan/rekomendasi.</em>";
+            
+            // Memberi warna otomatis pada tulisan status
+            let warnaStatus = "#333";
+            let fontTebal = "bold";
+            if (row.Status === "DISETUJUI") warnaStatus = "green";
+            if (row.Status === "DITOLAK") warnaStatus = "red";
+            if (row.Status === "DITUNDA") warnaStatus = "orange";
+            if (row.Status === "DISETUJUI DENGAN CATATAN") warnaStatus = "#0056b3";
 
             tbody.innerHTML += `
               <tr>
-                <td>
-                  <strong>${row.Nama_Pasien || "-"}</strong><br>
-                  <span style="font-size: 12px; color: var(--text-muted);">RM: ${row.No_RM || "-"}</span>
-                </td>
-                <td>
-                  <strong>${row.Antibiotik || "-"}</strong><br>
-                  <span style="font-size: 12px; color: var(--text-muted);">${row.Regimen_Dosis || "-"}</span>
-                </td>
-                <td>${row.Indikasi || "-"}</td>
-                <td><span class="badge ${badgeClass}">${statusTeks}</span></td>
-                <td style="font-size: 13px;">${catatan}</td>
+                <td>${row.Nama_Pasien}</td>
+                <td>${row.No_RM}</td>
+                <td>${row.Antibiotik}</td>
+                <td style="color: ${warnaStatus}; font-weight: ${fontTebal};">${row.Status}</td>
+                <td>${row.Catatan}</td>
               </tr>
             `;
           }
         })
         .catch(error => {
-          console.error("Error Fetch:", error);
-          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 24px; color: var(--danger);"><i class="fa-solid fa-triangle-exclamation"></i> Gagal memuat data antrean. Pastikan URL Web App valid.</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">Gagal memuat data antrean. Pastikan URL Web App sudah benar.</td></tr>';
         });
     }
 
-    // Jalankan fungsi muat tabel secara otomatis sesaat setelah halaman web selesai dimuat
-    window.addEventListener('DOMContentLoaded', muatStatus);
-
+    // Jalankan fungsi muat tabel otomatis saat website pertama kali dibuka
+    window.onload = muatStatus;
   </script>
 </body>
 </html>
