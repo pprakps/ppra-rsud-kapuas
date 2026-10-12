@@ -333,152 +333,62 @@
     // KONFIGURASI URL SCRIPT (SANGAT PENTING)
     // Ganti nilai di bawah ini dengan URL Web App Google Apps Script Anda yang VALID!
     // ==============================================================================
-document.getElementById("ppraForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      
-      const btn = document.getElementById("btnSubmit");
-      const btnText = document.getElementById("btnText");
-      const spinner = document.getElementById("loadingSpinner");
-      
-      // Ubah tampilan tombol saat proses kirim
-      btn.disabled = true;
-      btnText.innerText = "Mengirim Data & File...";
-      spinner.style.display = "block";
+<script>
+  document.getElementById("formPermintaan").addEventListener("submit", function(e) {
+    e.preventDefault();
+    
+    const fileInput = document.getElementById("fileKultur"); 
+    const file = fileInput.files[0];
+    
+    alert("Mengirim data, mohon tunggu sebentar...");
 
-      const fileInput = document.getElementById("Foto_Kultur");
+    const kirimData = (base64Data, fileName) => {
       const payload = {
-        Nama_Pasien: document.getElementById("Nama_Pasien").value,
-        No_RM: document.getElementById("No_RM").value,
-        Nama_DPJP: document.getElementById("Nama_DPJP").value,
-        Diagnosa: document.getElementById("Diagnosa").value,
-        Antibiotik: document.getElementById("Antibiotik").value,
-        Regimen_Dosis: document.getElementById("Regimen_Dosis").value,
-        Indikasi: document.getElementById("Indikasi").value,
-        Alasan: document.getElementById("Alasan").value,
-        fileBase64: null,
-        fileName: null
+        Nama_Pasien: document.getElementById("namaPasien").value,
+        No_RM: document.getElementById("noRM").value,
+        Nama_DPJP: document.getElementById("namaDPJP").value,
+        Diagnosa: document.getElementById("diagnosa").value,
+        Antibiotik: document.getElementById("antibiotik").value,
+        Regimen_Dosis: document.getElementById("regimenDosis").value,
+        Indikasi: document.getElementById("indikasi").value,
+        Alasan: document.getElementById("alasan").value,
+        fileName: fileName || "",
+        fileBase64: base64Data || ""
       };
 
-      // Cek apakah ada file foto yang diunggah
-      if (fileInput.files.length > 0) {
-        const file = fileInput.files[0];
-        
-        // Validasi ukuran file (maksimal 5MB)
-        if(file.size > 5 * 1024 * 1024) {
-            alert("Ukuran file foto terlalu besar. Maksimal 5MB.");
-            resetTombolKirim();
-            return;
-        }
+      const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzlpCTqXGvHcxbVTfIf4OaWW5nTv1RTu8FsthBMdIiooVyotQv723eQYQWILEKZTxL_CQ/exec"; // ⚠️ Ganti dengan URL /exec Google Apps Script Anda
 
-        const reader = new FileReader();
-        reader.onload = function(event) {
-          payload.fileBase64 = event.target.result;
-          payload.fileName = file.name;
-          kirimKeGoogleSheets(payload);
-        };
-        reader.readAsDataURL(file);
-      } else {
-        // Jika tidak ada foto, kirim data teks saja
-        payload.fileBase64 = null;
-        payload.fileName = "Tidak ada file";
-        kirimKeGoogleSheets(payload);
-      }
-    });
-
-    function kirimKeGoogleSheets(payload) {
       fetch(WEB_APP_URL, {
         method: "POST",
-        mode: "no-cors", // Mengatasi masalah pembatasan CORS dari browser ke Google Apps Script
         headers: {
           "Content-Type": "text/plain;charset=utf-8"
         },
         body: JSON.stringify(payload)
       })
-      .then(() => {
-        alert("Pemberitahuan: Permintaan resep antibiotik reserve berhasil dikirim ke Dasbor Tim PGA.");
-        document.getElementById("ppraForm").reset();
-        resetTombolKirim();
-        
-        // Beri jeda 2 detik agar Google Sheets sempat merekam data sebelum tabel direfresh
-        setTimeout(muatStatus, 2000); 
+      .then(response => response.json())
+      .then(result => {
+        if (result.status === "success") {
+          alert("Data Berhasil Dikirim dan Masuk ke Telegram!");
+          location.reload();
+        } else {
+          alert("Gagal dari server: " + (result.message || "Unknown error"));
+        }
       })
       .catch(error => {
-        console.error("Error:", error);
-        alert("Gagal terhubung ke server. Pastikan URL Web App sudah benar dan ada koneksi internet.");
-        resetTombolKirim();
+        alert("Terjadi kesalahan jaringan: " + error);
       });
+    };
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        kirimData(event.target.result, file.name);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      kirimData("", "");
     }
-
-    function resetTombolKirim() {
-      const btn = document.getElementById("btnSubmit");
-      document.getElementById("btnText").innerText = "Kirim Permintaan ke Dasbor PGA";
-      document.getElementById("loadingSpinner").style.display = "none";
-      btn.disabled = false;
-    }
-
-    // ------------------------------------------------------------------------------
-    // FUNGSI 2: MENGAMBIL DAN MENAMPILKAN DATA STATUS KE DALAM TABEL
-    // ------------------------------------------------------------------------------
-    function muatStatus() {
-      const tbody = document.getElementById("tabelStatus");
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 24px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Sinkronisasi data terbaru...</td></tr>';
-
-      fetch(WEB_APP_URL)
-        .then(response => response.json())
-        .then(data => {
-          tbody.innerHTML = "";
-          
-          if(data.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 24px; color: var(--text-muted);">Belum ada antrean permintaan antibiotik reserve saat ini.</td></tr>';
-            return;
-          }
-          
-          // Membaca data secara terbalik (Data terbaru / baris terbawah muncul di paling atas tabel)
-          for (let i = data.length - 1; i >= 0; i--) {
-            const row = data[i];
-            
-            // Konfigurasi Visual Badge Status
-            let badgeClass = "badge-menunggu";
-            let statusTeks = row.Status ? row.Status.toUpperCase() : "MENUNGGU REVIEW";
-            
-            if (statusTeks.includes("DISETUJUI") && statusTeks.includes("CATATAN")) {
-              badgeClass = "badge-catatan";
-            } else if (statusTeks === "DISETUJUI") {
-              badgeClass = "badge-disetujui";
-            } else if (statusTeks === "DITOLAK") {
-              badgeClass = "badge-ditolak";
-            } else if (statusTeks === "DITUNDA") {
-              badgeClass = "badge-ditunda";
-            }
-
-            // Mencegah error jika catatan kosong
-            let catatan = row.Catatan && row.Catatan.trim() !== "" ? row.Catatan : "<em>Belum ada catatan/rekomendasi.</em>";
-
-            tbody.innerHTML += `
-              <tr>
-                <td>
-                  <strong>${row.Nama_Pasien || "-"}</strong><br>
-                  <span style="font-size: 12px; color: var(--text-muted);">RM: ${row.No_RM || "-"}</span>
-                </td>
-                <td>
-                  <strong>${row.Antibiotik || "-"}</strong><br>
-                  <span style="font-size: 12px; color: var(--text-muted);">${row.Regimen_Dosis || "-"}</span>
-                </td>
-                <td>${row.Indikasi || "-"}</td>
-                <td><span class="badge ${badgeClass}">${statusTeks}</span></td>
-                <td style="font-size: 13px;">${catatan}</td>
-              </tr>
-            `;
-          }
-        })
-        .catch(error => {
-          console.error("Error Fetch:", error);
-          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 24px; color: var(--danger);"><i class="fa-solid fa-triangle-exclamation"></i> Gagal memuat data antrean. Pastikan URL Web App valid.</td></tr>';
-        });
-    }
-
-    // Jalankan fungsi muat tabel secara otomatis sesaat setelah halaman web selesai dimuat
-    window.addEventListener('DOMContentLoaded', muatStatus);
+  });
 
   </script>
 </body>
