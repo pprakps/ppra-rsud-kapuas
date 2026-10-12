@@ -333,12 +333,7 @@
     // KONFIGURASI URL SCRIPT (SANGAT PENTING)
     // Ganti nilai di bawah ini dengan URL Web App Google Apps Script Anda yang VALID!
     // ==============================================================================
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzlpCTqXGvHcxbVTfIf4OaWW5nTv1RTu8FsthBMdIiooVyotQv723eQYQWILEKZTxL_CQ/exec";
-
-    // ------------------------------------------------------------------------------
-    // FUNGSI 1: MENGIRIM DATA FORMULIR & UPLOAD FOTO
-    // ------------------------------------------------------------------------------
-    document.getElementById("ppraForm").addEventListener("submit", function(e) {
+document.getElementById("ppraForm").addEventListener("submit", function(e) {
       e.preventDefault();
       
       const btn = document.getElementById("btnSubmit");
@@ -368,7 +363,7 @@
       if (fileInput.files.length > 0) {
         const file = fileInput.files[0];
         
-        // Validasi ukuran file (opsional, maks 5MB)
+        // Validasi ukuran file (maksimal 5MB)
         if(file.size > 5 * 1024 * 1024) {
             alert("Ukuran file foto terlalu besar. Maksimal 5MB.");
             resetTombolKirim();
@@ -393,14 +388,19 @@
     function kirimKeGoogleSheets(payload) {
       fetch(WEB_APP_URL, {
         method: "POST",
+        mode: "no-cors", // Mengatasi masalah pembatasan CORS dari browser ke Google Apps Script
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
         body: JSON.stringify(payload)
       })
-      .then(response => response.text())
-      .then(data => {
+      .then(() => {
         alert("Pemberitahuan: Permintaan resep antibiotik reserve berhasil dikirim ke Dasbor Tim PGA.");
         document.getElementById("ppraForm").reset();
         resetTombolKirim();
-        muatStatus(); // Otomatis refresh tabel di bawah
+        
+        // Beri jeda 2 detik agar Google Sheets sempat merekam data sebelum tabel direfresh
+        setTimeout(muatStatus, 2000); 
       })
       .catch(error => {
         console.error("Error:", error);
