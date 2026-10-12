@@ -1,485 +1,485 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Formulir Praotorisasi Antibiotik Reserve - SIMRS</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<style>
-:root {
---primary-color: #0f4c81; /* Warna biru medis */
---secondary-color: #f0f4f8;
---accent-color: #e6f0fa;
---text-dark: #333333;
---text-muted: #666666;
---border-color: #d1d9e6;
---success: #28a745;
---warning: #ffc107;
---danger: #dc3545;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulir Praotorisasi Antibiotik Reserve - SIMRS</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #0f4c81; /* Warna biru medis */
+      --secondary-color: #f0f4f8;
+      --accent-color: #e6f0fa;
+      --text-dark: #333333;
+      --text-muted: #666666;
+      --border-color: #d1d9e6;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+    }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body { 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      background-color: var(--secondary-color); 
+      color: var(--text-dark);
+      line-height: 1.5;
+    }
 
-body { 
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-background-color: var(--secondary-color); 
-color: var(--text-dark);
-line-height: 1.5;
-}
+    .app-header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 16px 24px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-.app-header {
-background-color: var(--primary-color);
-color: white;
-padding: 16px 24px;
-box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-display: flex;
-align-items: center;
-gap: 12px;
-}
+    .container { 
+      max-width: 900px; 
+      margin: 32px auto; 
+      padding: 0 16px; 
+    }
 
-.container { 
-max-width: 900px; 
-margin: 32px auto; 
-padding: 0 16px; 
-}
+    .card {
+      background-color: white; 
+      border-radius: 8px; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+      margin-bottom: 32px;
+      overflow: hidden;
+    }
 
-.card {
-background-color: white; 
-border-radius: 8px; 
-box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
-margin-bottom: 32px;
-overflow: hidden;
-}
+    .card-header {
+      background-color: var(--accent-color);
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border-color);
+      font-weight: 600;
+      color: var(--primary-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-.card-header {
-background-color: var(--accent-color);
-padding: 16px 24px;
-border-bottom: 1px solid var(--border-color);
-font-weight: 600;
-color: var(--primary-color);
-display: flex;
-justify-content: space-between;
-align-items: center;
-}
+    .card-body {
+      padding: 24px;
+    }
 
-.card-body {
-padding: 24px;
-}
+    /* Form Layout Grid */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 24px;
+    }
 
-/* Form Layout Grid */
-.form-grid {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 16px 24px;
-}
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
 
-.form-group.full-width {
-grid-column: 1 / -1;
-}
+    label { 
+      display: block; 
+      margin-bottom: 6px; 
+      font-size: 14px; 
+      font-weight: 500;
+      color: var(--text-dark);
+    }
 
-label { 
-display: block; 
-margin-bottom: 6px; 
-font-size: 14px; 
-font-weight: 500;
-color: var(--text-dark);
-}
+    input, select, textarea { 
+      width: 100%; 
+      padding: 10px 12px; 
+      border: 1px solid var(--border-color); 
+      border-radius: 4px; 
+      font-size: 14px;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
 
-input, select, textarea { 
-width: 100%; 
-padding: 10px 12px; 
-border: 1px solid var(--border-color); 
-border-radius: 4px; 
-font-size: 14px;
-font-family: inherit;
-transition: border-color 0.2s;
-}
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.1);
+    }
 
-input:focus, select:focus, textarea:focus {
-outline: none;
-border-color: var(--primary-color);
-box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.1);
-}
+    input[type="file"] {
+      padding: 8px;
+      background-color: #f8f9fa;
+    }
 
-input[type="file"] {
-padding: 8px;
-background-color: #f8f9fa;
-}
+    .file-help {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      display: block;
+    }
 
-.file-help {
-font-size: 12px;
-color: var(--text-muted);
-margin-top: 4px;
-display: block;
-}
+    /* Buttons */
+    .btn { 
+      padding: 12px 24px; 
+      border: none; 
+      border-radius: 4px; 
+      cursor: pointer; 
+      font-size: 15px; 
+      font-weight: 600; 
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
 
-/* Buttons */
-.btn { 
-padding: 12px 24px; 
-border: none; 
-border-radius: 4px; 
-cursor: pointer; 
-font-size: 15px; 
-font-weight: 600; 
-transition: all 0.2s;
-display: inline-flex;
-align-items: center;
-justify-content: center;
-gap: 8px;
-}
+    .btn-primary { 
+      background-color: var(--primary-color); 
+      color: white; 
+      width: 100%;
+      margin-top: 16px;
+    }
 
-.btn-primary { 
-background-color: var(--primary-color); 
-color: white; 
-width: 100%;
-margin-top: 16px;
-}
+    .btn-primary:hover { background-color: #0b3d68; }
+    .btn-primary:disabled { background-color: #a0b4c8; cursor: not-allowed; }
 
-.btn-primary:hover { background-color: #0b3d68; }
-.btn-primary:disabled { background-color: #a0b4c8; cursor: not-allowed; }
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--primary-color);
+      color: var(--primary-color);
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+    .btn-outline:hover { background-color: var(--accent-color); }
 
-.btn-outline {
-background-color: transparent;
-border: 1px solid var(--primary-color);
-color: var(--primary-color);
-padding: 8px 16px;
-font-size: 13px;
-}
-.btn-outline:hover { background-color: var(--accent-color); }
+    /* Table Styles */
+    .table-container {
+      overflow-x: auto;
+    }
 
-/* Table Styles */
-.table-container {
-overflow-x: auto;
-}
+    table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      font-size: 14px; 
+    }
 
-table { 
-width: 100%; 
-border-collapse: collapse; 
-font-size: 14px; 
-}
+    th, td { 
+      padding: 12px 16px; 
+      border-bottom: 1px solid var(--border-color);
+      text-align: left; 
+    }
 
-th, td { 
-padding: 12px 16px; 
-border-bottom: 1px solid var(--border-color);
-text-align: left; 
-}
+    th { 
+      background-color: #f8f9fa; 
+      color: var(--text-muted);
+      font-weight: 600;
+      white-space: nowrap;
+    }
 
-th { 
-background-color: #f8f9fa; 
-color: var(--text-muted);
-font-weight: 600;
-white-space: nowrap;
-}
+    tr:hover { background-color: #fafbfc; }
 
-tr:hover { background-color: #fafbfc; }
+    /* Status Badges */
+    .badge {
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-block;
+      white-space: nowrap;
+    }
+    .badge-menunggu { background-color: #e2e3e5; color: #383d41; }
+    .badge-disetujui { background-color: #d4edda; color: #155724; }
+    .badge-ditolak { background-color: #f8d7da; color: #721c24; }
+    .badge-ditunda { background-color: #fff3cd; color: #856404; }
+    .badge-catatan { background-color: #cce5ff; color: #004085; }
 
-/* Status Badges */
-.badge {
-padding: 4px 8px;
-border-radius: 12px;
-font-size: 12px;
-font-weight: 600;
-display: inline-block;
-white-space: nowrap;
-}
-.badge-menunggu { background-color: #e2e3e5; color: #383d41; }
-.badge-disetujui { background-color: #d4edda; color: #155724; }
-.badge-ditolak { background-color: #f8d7da; color: #721c24; }
-.badge-ditunda { background-color: #fff3cd; color: #856404; }
-.badge-catatan { background-color: #cce5ff; color: #004085; }
+    .loader {
+      border: 3px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 3px solid var(--primary-color);
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      display: none;
+    }
+    
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-.loader {
-border: 3px solid #f3f3f3;
-border-radius: 50%;
-border-top: 3px solid var(--primary-color);
-width: 20px;
-height: 20px;
-animation: spin 1s linear infinite;
-display: none;
-}
-
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-/* Responsive */
-@media (max-width: 768px) {
-.form-grid { grid-template-columns: 1fr; }
-}
-</style>
+    /* Responsive */
+    @media (max-width: 768px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
 
-<header class="app-header">
-<i class="fa-solid fa-notes-medical" style="font-size: 24px;"></i>
-<div>
-<h2 style="font-size: 18px; margin: 0;">Sistem Praotorisasi PPRA</h2>
-<span style="font-size: 12px; opacity: 0.8;">Instalasi Farmasi & Tim PGA</span>
-</div>
-</header>
+  <header class="app-header">
+    <i class="fa-solid fa-notes-medical" style="font-size: 24px;"></i>
+    <div>
+      <h2 style="font-size: 18px; margin: 0;">Sistem Praotorisasi PPRA</h2>
+      <span style="font-size: 12px; opacity: 0.8;">Instalasi Farmasi & Tim PGA</span>
+    </div>
+  </header>
 
-<div class="container">
+  <div class="container">
+    
+    <!-- Bagian 1: Formulir Input -->
+    <div class="card">
+      <div class="card-header">
+        <span><i class="fa-solid fa-file-prescription"></i> Formulir Permintaan Antibiotik Reserve</span>
+      </div>
+      <div class="card-body">
+        <form id="ppraForm">
+          <div class="form-grid">
+            
+            <div class="form-group">
+              <label>Nama Pasien</label>
+              <input type="text" id="Nama_Pasien" placeholder="Masukkan nama lengkap pasien" required>
+            </div>
+            
+            <div class="form-group">
+              <label>No. Rekam Medis</label>
+              <input type="text" id="No_RM" placeholder="Contoh: 012345" required>
+            </div>
 
-<!-- Bagian 1: Formulir Input -->
-<div class="card">
-<div class="card-header">
-<span><i class="fa-solid fa-file-prescription"></i> Formulir Permintaan Antibiotik Reserve</span>
-</div>
-<div class="card-body">
-<form id="ppraForm">
-<div class="form-grid">
+            <div class="form-group">
+              <label>Nama DPJP (Dokter Penanggung Jawab)</label>
+              <input type="text" id="Nama_DPJP" placeholder="dr. Nama Lengkap, Sp.XX" required>
+            </div>
 
-<div class="form-group">
-<label>Nama Pasien</label>
-<input type="text" id="Nama_Pasien" placeholder="Masukkan nama lengkap pasien" required>
-</div>
+            <div class="form-group">
+              <label>Diagnosa Klinis</label>
+              <input type="text" id="Diagnosa" placeholder="Contoh: Sepsis ec Pneumonia" required>
+            </div>
 
-<div class="form-group">
-<label>No. Rekam Medis</label>
-<input type="text" id="No_RM" placeholder="Contoh: 012345" required>
-</div>
+            <div class="form-group">
+              <label>Pilihan Antibiotik Reserve</label>
+              <select id="Antibiotik" required>
+                <option value="" disabled selected>-- Pilih Antibiotik --</option>
+                <option value="Meropenem (IV)">Meropenem (IV)</option>
+                <option value="Seftazidim (IV)">Seftazidim (IV)</option>
+                <option value="Vankomisin (IV)">Vankomisin (IV)</option>
+                <option value="Levofloksasin (IV)">Levofloksasin (IV)</option>
+                <option value="Sefoperazon-Sulbaktam (IV)">Sefoperazon-Sulbaktam (IV)</option>
+              </select>
+            </div>
 
-<div class="form-group">
-<label>Nama DPJP (Dokter Penanggung Jawab)</label>
-<input type="text" id="Nama_DPJP" placeholder="dr. Nama Lengkap, Sp.XX" required>
-</div>
+            <div class="form-group">
+              <label>Regimen Dosis</label>
+              <input type="text" id="Regimen_Dosis" placeholder="Contoh: 3 x 1g (IV) drip dalam 3 jam" required>
+            </div>
 
-<div class="form-group">
-<label>Diagnosa Klinis</label>
-<input type="text" id="Diagnosa" placeholder="Contoh: Sepsis ec Pneumonia" required>
-</div>
+            <div class="form-group">
+              <label>Indikasi Terapi</label>
+              <select id="Indikasi" required>
+                <option value="Empiris">Terapi Empiris</option>
+                <option value="Definitif">Terapi Definitif</option>
+                <option value="Profilaksis">Profilaksis</option>
+              </select>
+            </div>
 
-<div class="form-group">
-<label>Pilihan Antibiotik Reserve</label>
-<select id="Antibiotik" required>
-<option value="" disabled selected>-- Pilih Antibiotik --</option>
-<option value="Meropenem (IV)">Meropenem (IV)</option>
-<option value="Seftazidim (IV)">Seftazidim (IV)</option>
-<option value="Vankomisin (IV)">Vankomisin (IV)</option>
-<option value="Levofloksasin (IV)">Levofloksasin (IV)</option>
-<option value="Sefoperazon-Sulbaktam (IV)">Sefoperazon-Sulbaktam (IV)</option>
-</select>
-</div>
+            <div class="form-group">
+              <label>Upload Hasil Kultur (Opsional)</label>
+              <input type="file" id="Foto_Kultur" accept="image/png, image/jpeg, application/pdf">
+              <span class="file-help">Kosongkan jika belum ada hasil kultur. Maksimal ukuran file 5MB.</span>
+            </div>
 
-<div class="form-group">
-<label>Regimen Dosis</label>
-<input type="text" id="Regimen_Dosis" placeholder="Contoh: 3 x 1g (IV) drip dalam 3 jam" required>
-</div>
+            <div class="form-group full-width">
+              <label>Alasan Klinis Permintaan</label>
+              <textarea id="Alasan" rows="3" placeholder="Jelaskan alasan klinis mengapa pasien membutuhkan antibiotik golongan reserve ini..." required></textarea>
+            </div>
 
-<div class="form-group">
-<label>Indikasi Terapi</label>
-<select id="Indikasi" required>
-<option value="Empiris">Terapi Empiris</option>
-<option value="Definitif">Terapi Definitif</option>
-<option value="Profilaksis">Profilaksis</option>
-</select>
-</div>
+          </div>
 
-<div class="form-group">
-<label>Upload Hasil Kultur (Opsional)</label>
-<input type="file" id="Foto_Kultur" accept="image/png, image/jpeg, application/pdf">
-<span class="file-help">Kosongkan jika belum ada hasil kultur. Maksimal ukuran file 5MB.</span>
-</div>
+          <button type="submit" id="btnSubmit" class="btn btn-primary">
+            <i class="fa-solid fa-paper-plane"></i> <span id="btnText">Kirim Permintaan ke Dasbor PGA</span>
+            <div id="loadingSpinner" class="loader"></div>
+          </button>
+        </form>
+      </div>
+    </div>
 
-<div class="form-group full-width">
-<label>Alasan Klinis Permintaan</label>
-<textarea id="Alasan" rows="3" placeholder="Jelaskan alasan klinis mengapa pasien membutuhkan antibiotik golongan reserve ini..." required></textarea>
-</div>
+    <!-- Bagian 2: Dasbor Status Antrean -->
+    <div class="card">
+      <div class="card-header">
+        <span><i class="fa-solid fa-list-check"></i> Status Pemantauan & Keputusan PGA</span>
+        <button class="btn btn-outline" onclick="muatStatus()" title="Muat ulang data dari server">
+          <i class="fa-solid fa-rotate-right"></i> Refresh
+        </button>
+      </div>
+      <div class="card-body" style="padding: 0;">
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th width="20%">Pasien / RM</th>
+                <th width="20%">Antibiotik / Dosis</th>
+                <th width="15%">Indikasi</th>
+                <th width="15%">Status Review</th>
+                <th width="30%">Catatan Apoteker/PGA</th>
+              </tr>
+            </thead>
+            <tbody id="tabelStatus">
+              <tr>
+                <td colspan="5" style="text-align: center; padding: 32px; color: var(--text-muted);">
+                  <i class="fa-solid fa-circle-notch fa-spin" style="margin-right: 8px;"></i> Menghubungkan ke server SIMRS...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
-</div>
+  </div>
 
-<button type="submit" id="btnSubmit" class="btn btn-primary">
-<i class="fa-solid fa-paper-plane"></i> <span id="btnText">Kirim Permintaan ke Dasbor PGA</span>
-<div id="loadingSpinner" class="loader"></div>
-</button>
-</form>
-</div>
-</div>
-
-<!-- Bagian 2: Dasbor Status Antrean -->
-<div class="card">
-<div class="card-header">
-<span><i class="fa-solid fa-list-check"></i> Status Pemantauan & Keputusan PGA</span>
-<button class="btn btn-outline" onclick="muatStatus()" title="Muat ulang data dari server">
-<i class="fa-solid fa-rotate-right"></i> Refresh
-</button>
-</div>
-<div class="card-body" style="padding: 0;">
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th width="20%">Pasien / RM</th>
-<th width="20%">Antibiotik / Dosis</th>
-<th width="15%">Indikasi</th>
-<th width="15%">Status Review</th>
-<th width="30%">Catatan Apoteker/PGA</th>
-</tr>
-</thead>
-<tbody id="tabelStatus">
-<tr>
-<td colspan="5" style="text-align: center; padding: 32px; color: var(--text-muted);">
-<i class="fa-solid fa-circle-notch fa-spin" style="margin-right: 8px;"></i> Menghubungkan ke server SIMRS...
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-
-</div>
-
-<script>
-// ==============================================================================
-// KONFIGURASI URL SCRIPT (SANGAT PENTING)
-// Ganti nilai di bawah ini dengan URL Web App Google Apps Script Anda yang VALID!
-// ==============================================================================
+  <script>
+    // ==============================================================================
+    // KONFIGURASI URL SCRIPT (SANGAT PENTING)
+    // Ganti nilai di bawah ini dengan URL Web App Google Apps Script Anda yang VALID!
+    // ==============================================================================
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxqXkvRqtTQ7tFYiWtw9KYfSWoxRgQoAV6Sz2r9h2rF2eHFEYDBpifIlUusR8rlxtwsjQ/exec";
 
-// ------------------------------------------------------------------------------
-// FUNGSI 1: MENGIRIM DATA FORMULIR & UPLOAD FOTO
-// ------------------------------------------------------------------------------
-document.getElementById("ppraForm").addEventListener("submit", function(e) {
-e.preventDefault();
+    // ------------------------------------------------------------------------------
+    // FUNGSI 1: MENGIRIM DATA FORMULIR & UPLOAD FOTO
+    // ------------------------------------------------------------------------------
+    document.getElementById("ppraForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      
+      const btn = document.getElementById("btnSubmit");
+      const btnText = document.getElementById("btnText");
+      const spinner = document.getElementById("loadingSpinner");
+      
+      // Ubah tampilan tombol saat proses kirim
+      btn.disabled = true;
+      btnText.innerText = "Mengirim Data & File...";
+      spinner.style.display = "block";
 
-const btn = document.getElementById("btnSubmit");
-const btnText = document.getElementById("btnText");
-const spinner = document.getElementById("loadingSpinner");
+      const fileInput = document.getElementById("Foto_Kultur");
+      const payload = {
+        Nama_Pasien: document.getElementById("Nama_Pasien").value,
+        No_RM: document.getElementById("No_RM").value,
+        Nama_DPJP: document.getElementById("Nama_DPJP").value,
+        Diagnosa: document.getElementById("Diagnosa").value,
+        Antibiotik: document.getElementById("Antibiotik").value,
+        Regimen_Dosis: document.getElementById("Regimen_Dosis").value,
+        Indikasi: document.getElementById("Indikasi").value,
+        Alasan: document.getElementById("Alasan").value,
+        fileBase64: null,
+        fileName: null
+      };
 
-// Ubah tampilan tombol saat proses kirim
-btn.disabled = true;
-btnText.innerText = "Mengirim Data & File...";
-spinner.style.display = "block";
+      // Cek apakah ada file foto yang diunggah
+      if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        
+        // Validasi ukuran file (opsional, maks 5MB)
+        if(file.size > 5 * 1024 * 1024) {
+            alert("Ukuran file foto terlalu besar. Maksimal 5MB.");
+            resetTombolKirim();
+            return;
+        }
 
-const fileInput = document.getElementById("Foto_Kultur");
-const payload = {
-Nama_Pasien: document.getElementById("Nama_Pasien").value,
-No_RM: document.getElementById("No_RM").value,
-Nama_DPJP: document.getElementById("Nama_DPJP").value,
-Diagnosa: document.getElementById("Diagnosa").value,
-Antibiotik: document.getElementById("Antibiotik").value,
-Regimen_Dosis: document.getElementById("Regimen_Dosis").value,
-Indikasi: document.getElementById("Indikasi").value,
-Alasan: document.getElementById("Alasan").value,
-fileBase64: null,
-fileName: null
-};
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          payload.fileBase64 = event.target.result;
+          payload.fileName = file.name;
+          kirimKeGoogleSheets(payload);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        // Jika tidak ada foto, kirim data teks saja
+        payload.fileBase64 = null;
+        payload.fileName = "Tidak ada file";
+        kirimKeGoogleSheets(payload);
+      }
+    });
 
-// Cek apakah ada file foto yang diunggah
-if (fileInput.files.length > 0) {
-const file = fileInput.files[0];
+    function kirimKeGoogleSheets(payload) {
+      fetch(WEB_APP_URL, {
+        method: "POST",
+        body: JSON.stringify(payload)
+      })
+      .then(response => response.text())
+      .then(data => {
+        alert("Pemberitahuan: Permintaan resep antibiotik reserve berhasil dikirim ke Dasbor Tim PGA.");
+        document.getElementById("ppraForm").reset();
+        resetTombolKirim();
+        muatStatus(); // Otomatis refresh tabel di bawah
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        alert("Gagal terhubung ke server. Pastikan URL Web App sudah benar dan ada koneksi internet.");
+        resetTombolKirim();
+      });
+    }
 
-// Validasi ukuran file (opsional, maks 5MB)
-if(file.size > 5 * 1024 * 1024) {
-alert("Ukuran file foto terlalu besar. Maksimal 5MB.");
-resetTombolKirim();
-return;
-}
+    function resetTombolKirim() {
+      const btn = document.getElementById("btnSubmit");
+      document.getElementById("btnText").innerText = "Kirim Permintaan ke Dasbor PGA";
+      document.getElementById("loadingSpinner").style.display = "none";
+      btn.disabled = false;
+    }
 
-const reader = new FileReader();
-reader.onload = function(event) {
-payload.fileBase64 = event.target.result;
-payload.fileName = file.name;
-kirimKeGoogleSheets(payload);
-};
-reader.readAsDataURL(file);
-} else {
-// Jika tidak ada foto, kirim data teks saja
-payload.fileBase64 = null;
-payload.fileName = "Tidak ada file";
-kirimKeGoogleSheets(payload);
-}
-});
+    // ------------------------------------------------------------------------------
+    // FUNGSI 2: MENGAMBIL DAN MENAMPILKAN DATA STATUS KE DALAM TABEL
+    // ------------------------------------------------------------------------------
+    function muatStatus() {
+      const tbody = document.getElementById("tabelStatus");
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 24px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Sinkronisasi data terbaru...</td></tr>';
 
-function kirimKeGoogleSheets(payload) {
-fetch(WEB_APP_URL, {
-method: "POST",
-body: JSON.stringify(payload)
-})
-.then(response => response.text())
-.then(data => {
-alert("Pemberitahuan: Permintaan resep antibiotik reserve berhasil dikirim ke Dasbor Tim PGA.");
-document.getElementById("ppraForm").reset();
-resetTombolKirim();
-muatStatus(); // Otomatis refresh tabel di bawah
-})
-.catch(error => {
-console.error("Error:", error);
-alert("Gagal terhubung ke server. Pastikan URL Web App sudah benar dan ada koneksi internet.");
-resetTombolKirim();
-});
-}
+      fetch(WEB_APP_URL)
+        .then(response => response.json())
+        .then(data => {
+          tbody.innerHTML = "";
+          
+          if(data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 24px; color: var(--text-muted);">Belum ada antrean permintaan antibiotik reserve saat ini.</td></tr>';
+            return;
+          }
+          
+          // Membaca data secara terbalik (Data terbaru / baris terbawah muncul di paling atas tabel)
+          for (let i = data.length - 1; i >= 0; i--) {
+            const row = data[i];
+            
+            // Konfigurasi Visual Badge Status
+            let badgeClass = "badge-menunggu";
+            let statusTeks = row.Status ? row.Status.toUpperCase() : "MENUNGGU REVIEW";
+            
+            if (statusTeks.includes("DISETUJUI") && statusTeks.includes("CATATAN")) {
+              badgeClass = "badge-catatan";
+            } else if (statusTeks === "DISETUJUI") {
+              badgeClass = "badge-disetujui";
+            } else if (statusTeks === "DITOLAK") {
+              badgeClass = "badge-ditolak";
+            } else if (statusTeks === "DITUNDA") {
+              badgeClass = "badge-ditunda";
+            }
 
-function resetTombolKirim() {
-const btn = document.getElementById("btnSubmit");
-document.getElementById("btnText").innerText = "Kirim Permintaan ke Dasbor PGA";
-document.getElementById("loadingSpinner").style.display = "none";
-btn.disabled = false;
-}
+            // Mencegah error jika catatan kosong
+            let catatan = row.Catatan && row.Catatan.trim() !== "" ? row.Catatan : "<em>Belum ada catatan/rekomendasi.</em>";
 
-// ------------------------------------------------------------------------------
-// FUNGSI 2: MENGAMBIL DAN MENAMPILKAN DATA STATUS KE DALAM TABEL
-// ------------------------------------------------------------------------------
-function muatStatus() {
-const tbody = document.getElementById("tabelStatus");
-tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 24px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Sinkronisasi data terbaru...</td></tr>';
+            tbody.innerHTML += `
+              <tr>
+                <td>
+                  <strong>${row.Nama_Pasien || "-"}</strong><br>
+                  <span style="font-size: 12px; color: var(--text-muted);">RM: ${row.No_RM || "-"}</span>
+                </td>
+                <td>
+                  <strong>${row.Antibiotik || "-"}</strong><br>
+                  <span style="font-size: 12px; color: var(--text-muted);">${row.Regimen_Dosis || "-"}</span>
+                </td>
+                <td>${row.Indikasi || "-"}</td>
+                <td><span class="badge ${badgeClass}">${statusTeks}</span></td>
+                <td style="font-size: 13px;">${catatan}</td>
+              </tr>
+            `;
+          }
+        })
+        .catch(error => {
+          console.error("Error Fetch:", error);
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 24px; color: var(--danger);"><i class="fa-solid fa-triangle-exclamation"></i> Gagal memuat data antrean. Pastikan URL Web App valid.</td></tr>';
+        });
+    }
 
-fetch(WEB_APP_URL)
-.then(response => response.json())
-.then(data => {
-tbody.innerHTML = "";
+    // Jalankan fungsi muat tabel secara otomatis sesaat setelah halaman web selesai dimuat
+    window.addEventListener('DOMContentLoaded', muatStatus);
 
-if(data.length === 0) {
-tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 24px; color: var(--text-muted);">Belum ada antrean permintaan antibiotik reserve saat ini.</td></tr>';
-return;
-}
-
-// Membaca data secara terbalik (Data terbaru / baris terbawah muncul di paling atas tabel)
-for (let i = data.length - 1; i >= 0; i--) {
-const row = data[i];
-
-// Konfigurasi Visual Badge Status
-let badgeClass = "badge-menunggu";
-let statusTeks = row.Status ? row.Status.toUpperCase() : "MENUNGGU REVIEW";
-
-if (statusTeks.includes("DISETUJUI") && statusTeks.includes("CATATAN")) {
-badgeClass = "badge-catatan";
-} else if (statusTeks === "DISETUJUI") {
-badgeClass = "badge-disetujui";
-} else if (statusTeks === "DITOLAK") {
-badgeClass = "badge-ditolak";
-} else if (statusTeks === "DITUNDA") {
-badgeClass = "badge-ditunda";
-}
-
-// Mencegah error jika catatan kosong
-let catatan = row.Catatan && row.Catatan.trim() !== "" ? row.Catatan : "<em>Belum ada catatan/rekomendasi.</em>";
-
-tbody.innerHTML += `
-             <tr>
-               <td>
-                 <strong>${row.Nama_Pasien || "-"}</strong><br>
-                 <span style="font-size: 12px; color: var(--text-muted);">RM: ${row.No_RM || "-"}</span>
-               </td>
-               <td>
-                 <strong>${row.Antibiotik || "-"}</strong><br>
-                 <span style="font-size: 12px; color: var(--text-muted);">${row.Regimen_Dosis || "-"}</span>
-               </td>
-               <td>${row.Indikasi || "-"}</td>
-               <td><span class="badge ${badgeClass}">${statusTeks}</span></td>
-               <td style="font-size: 13px;">${catatan}</td>
-             </tr>
-           `;
-}
-})
-.catch(error => {
-console.error("Error Fetch:", error);
-tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 24px; color: var(--danger);"><i class="fa-solid fa-triangle-exclamation"></i> Gagal memuat data antrean. Pastikan URL Web App valid.</td></tr>';
-});
-}
-
-// Jalankan fungsi muat tabel secara otomatis sesaat setelah halaman web selesai dimuat
-window.addEventListener('DOMContentLoaded', muatStatus);
-
-</script>
+  </script>
 </body>
 </html>
