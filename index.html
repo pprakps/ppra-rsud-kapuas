@@ -253,6 +253,9 @@
                 <option value="" disabled selected>-- Pilih Antibiotik --</option>
                 <option value="Meropenem (IV)">Meropenem (IV)</option>
                 <option value="Seftazidim (IV)">Seftazidim (IV)</option>
+                <option value="Vankomisin (IV)">Vankomisin (IV)</option>
+                <option value="Levofloksasin (IV)">Levofloksasin (IV)</option>
+                <option value="Sefoperazon-Sulbaktam (IV)">Sefoperazon-Sulbaktam (IV)</option>
               </select>
             </div>
 
@@ -302,16 +305,16 @@
       <div class="card-body" style="padding: 0;">
         <div class="table-container">
           <table>
-           <thead>
-  <tr>
-    <th>Pasien / RM</th>
-    <th>Diagnosa</th>
-    <th>Antibiotik / Dosis</th>
-    <th>Indikasi</th>
-    <th>Status</th>
-    <th>Catatan PGA</th>
-  </tr>
-</thead>
+            <thead>
+              <tr>
+                <th width="20%">Pasien / RM</th>
+                <th width="20%">Diagnosa</th>
+                <th width="20%">Antibiotik / Dosis</th>
+                <th width="15%">Indikasi</th>
+                <th width="15%">Status Review</th>
+                <th width="30%">Catatan PGA</th>
+              </tr>
+            </thead>
             <tbody id="tabelStatus">
               <tr>
                 <td colspan="5" style="text-align: center; padding: 32px; color: var(--text-muted);">
@@ -395,7 +398,7 @@
       })
       .then(response => response.text())
       .then(data => {
-        alert("Permintaan resep antibiotik reserve berhasil dikirim ke Dasbor Tim PGA");
+        alert("Pemberitahuan: Permintaan resep antibiotik reserve berhasil dikirim ke Dasbor Tim PGA.");
         document.getElementById("ppraForm").reset();
         resetTombolKirim();
         muatStatus(); // Otomatis refresh tabel di bawah
@@ -419,7 +422,7 @@
     // ------------------------------------------------------------------------------
     function muatStatus() {
       const tbody = document.getElementById("tabelStatus");
-      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 24px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Sinkronisasi data terbaru...</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 24px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Sinkronisasi data terbaru...</td></tr>';
 
       fetch(WEB_APP_URL)
         .then(response => response.json())
@@ -427,13 +430,15 @@
           tbody.innerHTML = "";
           
           if(data.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 24px; color: var(--text-muted);">Belum ada antrean permintaan antibiotik reserve saat ini.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 24px; color: var(--text-muted);">Belum ada antrean permintaan antibiotik reserve saat ini.</td></tr>';
             return;
           }
           
+          // Membaca data secara terbalik (Data terbaru / baris terbawah muncul di paling atas tabel)
           for (let i = data.length - 1; i >= 0; i--) {
             const row = data[i];
             
+            // Konfigurasi Visual Badge Status
             let badgeClass = "badge-menunggu";
             let statusTeks = row.Status ? row.Status.toUpperCase() : "MENUNGGU REVIEW";
             
@@ -447,7 +452,8 @@
               badgeClass = "badge-ditunda";
             }
 
-            let catatan = row.Catatan && row.Catatan.trim() !== "" ? row.Catatan : "<em>Belum ada catatan PGA.</em>";
+            // Mencegah error jika catatan kosong
+            let catatan = row.Catatan && row.Catatan.trim() !== "" ? row.Catatan : "<em>Belum ada catatan/rekomendasi.</em>";
 
             tbody.innerHTML += `
               <tr>
@@ -469,7 +475,7 @@
         })
         .catch(error => {
           console.error("Error Fetch:", error);
-          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 24px; color: var(--danger);"><i class="fa-solid fa-triangle-exclamation"></i> Gagal memuat data antrean. Pastikan URL Web App valid.</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 24px; color: var(--danger);"><i class="fa-solid fa-triangle-exclamation"></i> Gagal memuat data antrean. Pastikan URL Web App valid.</td></tr>';
         });
     }
 
