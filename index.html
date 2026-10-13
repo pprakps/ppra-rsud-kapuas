@@ -306,14 +306,14 @@
         <div class="table-container">
           <table>
             <thead>
-              <tr>
-                <th width="20%">Pasien / RM</th>
-                <th width="20%">Antibiotik / Dosis</th>
-                <th width="15%">Indikasi</th>
-                <th width="15%">Status Review</th>
-                <th width="30%">Catatan Apoteker/PGA</th>
-              </tr>
-            </thead>
+  <tr>
+    <th>Pasien / RM</th>
+    <th>Antibiotik / Dosis</th>
+    <th>Indikasi</th>
+    <th>Status</th>
+    <th>Catatan PGA</th>
+  </tr>
+</thead>
             <tbody id="tabelStatus">
               <tr>
                 <td colspan="5" style="text-align: center; padding: 32px; color: var(--text-muted);">
@@ -333,7 +333,7 @@
     // KONFIGURASI URL SCRIPT (SANGAT PENTING)
     // Ganti nilai di bawah ini dengan URL Web App Google Apps Script Anda yang VALID!
     // ==============================================================================
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxqXkvRqtTQ7tFYiWtw9KYfSWoxRgQoAV6Sz2r9h2rF2eHFEYDBpifIlUusR8rlxtwsjQ/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby6znNJNfppPhFGp52GjVQbe0E-gyliXtlKgFDVI-VPBoPbE-tHD_6NqvvMadP9PP8IOw/exec";
 
     // ------------------------------------------------------------------------------
     // FUNGSI 1: MENGIRIM DATA FORMULIR & UPLOAD FOTO
@@ -433,11 +433,9 @@
             return;
           }
           
-          // Membaca data secara terbalik (Data terbaru / baris terbawah muncul di paling atas tabel)
           for (let i = data.length - 1; i >= 0; i--) {
             const row = data[i];
             
-            // Konfigurasi Visual Badge Status
             let badgeClass = "badge-menunggu";
             let statusTeks = row.Status ? row.Status.toUpperCase() : "MENUNGGU REVIEW";
             
@@ -451,8 +449,7 @@
               badgeClass = "badge-ditunda";
             }
 
-            // Mencegah error jika catatan kosong
-            let catatan = row.Catatan && row.Catatan.trim() !== "" ? row.Catatan : "<em>Belum ada catatan/rekomendasi.</em>";
+            let catatan = row.Catatan && row.Catatan.trim() !== "" ? row.Catatan : "<em>Belum ada catatan PGA.</em>";
 
             tbody.innerHTML += `
               <tr>
