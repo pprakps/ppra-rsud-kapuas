@@ -331,7 +331,7 @@
     // KONFIGURASI URL SCRIPT (SANGAT PENTING)
     // Ganti nilai di bawah ini dengan URL Web App Google Apps Script Anda yang VALID!
     // ==============================================================================
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzVpmIsVyN1t_SI0ex33h0f5CmvCbsnF4YlCb4C5Ae6hqOp6AhgaI7JsztG8UzMZlJbUw/exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxN-UmVuQejp71bETNBZMqMnIl6qESWd-BzkoxtIJpRYoX4xuGooLjZDaBX5GDkwLVewA/exec";
 
     // ------------------------------------------------------------------------------
     // FUNGSI 1: MENGIRIM DATA FORMULIR & UPLOAD FOTO
@@ -395,7 +395,7 @@
       })
       .then(response => response.text())
       .then(data => {
-        alert("Pemberitahuan: Permintaan resep antibiotik reserve berhasil dikirim ke Dasbor Tim PGA.");
+        alert("Permintaan resep antibiotik reserve berhasil dikirim ke Dasbor Tim PGA");
         document.getElementById("ppraForm").reset();
         resetTombolKirim();
         muatStatus(); // Otomatis refresh tabel di bawah
